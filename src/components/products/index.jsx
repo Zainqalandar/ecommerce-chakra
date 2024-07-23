@@ -49,7 +49,7 @@ export const Products = () => {
 						mx="auto"
 						my="20px"
 					>
-						Men's Clothes
+						Men&apos;s Clothes
 					</Box>
 					<Box
 						display="flex"
@@ -85,7 +85,7 @@ export const Products = () => {
 						mx="auto"
 						my="20px"
 					>
-						Women's Clothes
+						Women&apos;s Clothes
 					</Box>
 					<Box
 						display="flex"

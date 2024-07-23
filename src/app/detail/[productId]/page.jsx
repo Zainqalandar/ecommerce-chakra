@@ -20,7 +20,7 @@ const Detail = (props) => {
                 console.log('Api failed errr::', error);
 			}
 		})();
-	}, []);
+	}, [props.params.productId]);
     
 	return (
 		<>
