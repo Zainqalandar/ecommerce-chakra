@@ -5,6 +5,7 @@ import ProductProvider from '@/provider/context/ProductProvider';
 import CartProvider from '@/provider/context/CartDataProvider';
 import Navbar from '@/components/navbar';
 import DarkModeButton from '@/components/ui/DarkModeButton';
+import { NotificationProvider } from '@/provider/context/NotificationProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
 		<html lang="en">
 			<body className={inter.className}>
 				<ProductProvider>
+					<NotificationProvider>
 					<CartProvider>
 						<Providers>
 							<Navbar />
@@ -25,6 +27,7 @@ export default function RootLayout({ children }) {
 							{children}
 						</Providers>
 					</CartProvider>
+					</NotificationProvider>
 				</ProductProvider>
 			</body>
 		</html>
