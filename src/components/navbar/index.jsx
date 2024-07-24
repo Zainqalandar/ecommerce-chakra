@@ -15,7 +15,7 @@ import {
 	useColorModeValue,
 	useBreakpointValue,
 	useDisclosure,
-	Input,
+	Input, Image,
 } from '@chakra-ui/react';
 import {
 	HamburgerIcon,
@@ -67,16 +67,14 @@ const Navbar = () => {
 					flex={{ base: 1 }}
 					justify={{ base: 'center', md: 'start' }}
 				>
-					<Text
-						textAlign={useBreakpointValue({
-							base: 'center',
-							md: 'left',
-						})}
-						fontFamily={'heading'}
-						color={useColorModeValue('gray.800', 'white')}
-					>
-						eCommerce
-					</Text>
+					<Image
+						src='/shopify-favicon.png'
+						alt="Shopify Image"
+						width='30px' // Adjust width and height as needed
+						height='30px'
+						layout="responsive"
+						priority
+					/>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
 						<DesktopNav />
@@ -330,6 +328,10 @@ const NAV_ITEMS = [
 	{
 		label: 'About Us',
 		href: '#',
+	},
+	{
+		label: 'Admin',
+		href: '/admin',
 	},
 	{
 		label: 'Contact Us',
