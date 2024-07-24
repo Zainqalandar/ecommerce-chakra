@@ -13,14 +13,6 @@ const Detail = (props) => {
 		error,
 	} = useFetch(`products/${props.params.productId}`);
 
-	useEffect(() => {
-		if (error) {
-			notify(`Error: ${error.message}`, 'error');
-		} else if (product) {
-			notify('Product fetched successfully!', 'success');
-		}
-	}, [error, product, notify]);
-
 	if (loading) return <Loading />;
 	if (error) return <p>Error: {error.message}</p>;
 

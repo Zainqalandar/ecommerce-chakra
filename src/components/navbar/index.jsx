@@ -73,7 +73,7 @@ const Navbar = () => {
 						width='30px' // Adjust width and height as needed
 						height='30px'
 						layout="responsive"
-						priority
+						priority="true" // Convert boolean to string
 					/>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
