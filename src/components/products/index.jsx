@@ -19,7 +19,6 @@ export const Products = () => {
 	useEffect(() => {
 		let filteredProducts = [];
 		if (searchQuerie !== '') {
-			console.log('searchQuerie', searchQuerie)
 			 filteredProducts = [...filterProducts].filter((product) => {
 				const productName = product.title.toLowerCase();
 				const querieLowerCase = searchQuerie.toLowerCase();

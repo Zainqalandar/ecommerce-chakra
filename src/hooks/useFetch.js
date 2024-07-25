@@ -8,10 +8,11 @@ const useFetch = (endpoint, method = 'GET', payload = null) => {
     const [data, setdata] = useState(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    console.log('HellWRLD')
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
+            setError(null);
             try {
                 const options = {
                     method,
@@ -40,7 +41,7 @@ const useFetch = (endpoint, method = 'GET', payload = null) => {
 
         fetchData()
       
-    }, [])
+    }, [endpoint, method, payload])
 
 
     return {data, loading, error}

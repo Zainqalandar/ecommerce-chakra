@@ -48,7 +48,6 @@ const ProductProvider = ({ children }) => {
 	};
 
 	const sortByCategory = (category) => {
-		console.log('category', category);
 		let sortedProducts = [];
 		if (category !== '') {
 			sortedProducts = [...products].filter(
