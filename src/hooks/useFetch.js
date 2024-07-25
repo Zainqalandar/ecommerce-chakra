@@ -18,7 +18,7 @@ const useFetch = (endpoint, method = 'GET', payload = null) => {
                         'Content-Type': 'application/json',
                     },
                 }
-                if(!payload){
+                if(payload){
                     options.body = JSON.stringify(payload)
                 }
                 const res = await fetch(`${baseUrl}/${endpoint}`, options)
