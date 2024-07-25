@@ -1,7 +1,9 @@
 
+import { useNotification } from '@/provider/context/NotificationProvider';
 import React, { useEffect, useState } from 'react'
 
 const useFetch = (endpoint, method = 'GET', payload = null) => {
+    const notify = useNotification();
     const baseUrl = 'https://fakestoreapi.com';
     const [data, setdata] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -16,7 +18,7 @@ const useFetch = (endpoint, method = 'GET', payload = null) => {
                         'Content-Type': 'application/json',
                     },
                 }
-                if(payload){
+                if(!payload){
                     options.body = JSON.stringify(payload)
                 }
                 const res = await fetch(`${baseUrl}/${endpoint}`, options)
@@ -28,6 +30,7 @@ const useFetch = (endpoint, method = 'GET', payload = null) => {
                 
             } catch (error) {
                 setError(error);
+                notify(`Error: ${error.message}`, 'error', 2000);
             } finally {
                 setLoading(false)
             }

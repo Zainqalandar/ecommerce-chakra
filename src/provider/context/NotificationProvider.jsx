@@ -1,6 +1,6 @@
 'use client'
 import CustomNotification from '@/components/ui/CustomNotification.js';
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 
 const NotificationContext = createContext();
 
@@ -8,10 +8,29 @@ export const useNotification = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
   const [notification, setNotification] = useState(null);
+  const [timeoutId, setTimeoutId] = useState(null);
 
-  const notify = useCallback((message, status = 'info', duration = 5000) => {
+  const notify = useCallback((message, status = 'info', duration = 3000) => {
     setNotification({ message, status, duration });
-  }, []);
+
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    const id = setTimeout(() => {
+      setNotification(null);
+    }, duration);
+
+    setTimeoutId(id);
+  }, [timeoutId]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   return (
     <NotificationContext.Provider value={notify}>

@@ -1,9 +1,11 @@
 'use client';
 import { createContext, useEffect, useState, useContext } from 'react';
+import { useNotification } from './NotificationProvider';
 
 const ProductContext = createContext();
 
 const ProductProvider = ({ children }) => {
+	const notify = useNotification()
 	const [filterProducts, setFilterProducts] = useState([]);
 	const [products, setProducts] = useState([]);
 	const [loading, setLoading] = useState(true);
@@ -22,9 +24,11 @@ const ProductProvider = ({ children }) => {
 				setLoading(false);
 			} catch (error) {
 				console.log('Api failed Error:', error);
+				notify(`Error: ${error.message}`, 'error');
 			}
 		})();
 	}, []);
+
 
 	const sortByOrder = (order) => {
 		let sortedProducts = [];

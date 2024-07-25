@@ -11,7 +11,7 @@ const CustomNotification = ({ message, status = 'info', duration = 5000 }) => {
         status: status,
         duration: duration,
         isClosable: true,
-        position: 'top',
+        position: 'top right',
         variant: 'subtle',
         containerStyle: {
           maxWidth: '90%',
