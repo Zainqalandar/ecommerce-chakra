@@ -8,10 +8,12 @@ import Loading from "@/components/ui/Loading";
 import {useNotification} from "@/provider/context/NotificationProvider";
 
 const AdminRoot = () => {
-    const {products, loading} = useProductContext()
+    const {products, loading, deleteProductHandler, filterProducts} = useProductContext()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
     const notify = useNotification()
+
+    console.log('Hello Admain')
 
 
     const handlePost = async (item) => {
@@ -53,6 +55,25 @@ const AdminRoot = () => {
             notify(`Error: ${error.message}`, 'error');
         }
     }
+    const handleDelete = async (postId) => {
+        try {
+            const res = await fetch(`https://fakestoreapi.com/products/${postId}`, {
+                method: 'DELETE',
+            });
+
+            if(!res.ok){
+                throw new Error(`Error: ${res.message}`)
+            }
+
+            if(res.status === 200) {
+                notify(`Post successfully Deleted`, 'info', 2000);
+                deleteProductHandler(postId)
+            }
+        } catch (error) {
+            console.log('Api failed err', error);
+            notify(`Error: ${error.message}`, 'error');
+        }
+    }
 
     const openModal = (product = null) => {
         setCurrentProduct(product);
@@ -71,12 +92,14 @@ const AdminRoot = () => {
         closeModal();
     };
 
-    const deleteProduct = (id) => setProducts(products.filter(p => p.id !== id));
+    const deleteProduct = (id) => {
+        handleDelete(id)
+    }
     return (
         <>
             <AdminHeader onAdd={() => openModal()}/>
             {
-                !loading ? (<ProductTable products={products} onEdit={openModal} onDelete={deleteProduct}/>) : (
+                !loading ? (<ProductTable products={filterProducts} onEdit={openModal} onDelete={deleteProduct}/>) : (
                     <Loading/>
                 )
             }

@@ -1,12 +1,13 @@
 'use client';
-import { Box } from '@chakra-ui/react';
 import ProductsFilter from './products-filters/index';
 import AllProducts from './all-products';
 // import { useProductContext } from '../../provider/context/ProductProvider';
 import Loading from '../ui/Loading';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useProductContext } from '@/provider/context/ProductProvider';
 import Link from 'next/link';
+import HeadingBox from "@/components/ui/HeadingBox";
+import {Box} from "@chakra-ui/react";
 
 export const Products = () => {
 	const [allProducts, setAllProducts] = useState([]);
@@ -21,8 +22,8 @@ export const Products = () => {
 		if (searchQuerie !== '') {
 			 filteredProducts = [...filterProducts].filter((product) => {
 				const productName = product.title.toLowerCase();
-				const querieLowerCase = searchQuerie.toLowerCase();
-				return productName.includes(querieLowerCase);
+				const queriesLowerCase = searchQuerie.toLowerCase();
+				return productName.includes(queriesLowerCase);
 			});
 			setAllProducts(filteredProducts);
 		}else{
@@ -35,21 +36,7 @@ export const Products = () => {
 			<ProductsFilter />
 			{!loading ? (
 				<Box>
-					<Box
-						p={5}
-						maxW="520px"
-						borderWidth="1px"
-						borderRadius="lg"
-						overflow="hidden"
-						bg="#f96e29"
-						fontWeight="bold"
-						color="black"
-						textAlign="center"
-						mx="auto"
-						my="20px"
-					>
-						Men&apos;s Clothes
-					</Box>
+					<HeadingBox text={`Men's Clothes`} />
 					<Box
 						display="flex"
 						justifyContent="space-around"
@@ -70,22 +57,7 @@ export const Products = () => {
 								</Link>
 							))}
 					</Box>
-
-					<Box
-						p={5}
-						maxW="520px"
-						borderWidth="1px"
-						borderRadius="lg"
-						overflow="hidden"
-						bg="#f96e29"
-						fontWeight="bold"
-						color="black"
-						textAlign="center"
-						mx="auto"
-						my="20px"
-					>
-						Women&apos;s Clothes
-					</Box>
+					<HeadingBox text={`Women's Clothes`} />
 					<Box
 						display="flex"
 						justifyContent="space-around"
@@ -106,22 +78,7 @@ export const Products = () => {
 								</Link>
 							))}
 					</Box>
-
-					<Box
-						p={5}
-						maxW="520px"
-						borderWidth="1px"
-						borderRadius="lg"
-						overflow="hidden"
-						bg="#f96e29"
-						fontWeight="bold"
-						color="black"
-						textAlign="center"
-						mx="auto"
-						my="20px"
-					>
-						Electronics
-					</Box>
+					<HeadingBox text={`Electronics`} />
 					<Box
 						display="flex"
 						justifyContent="space-around"
@@ -142,21 +99,7 @@ export const Products = () => {
 							))}
 					</Box>
 
-					<Box
-						p={5}
-						maxW="520px"
-						borderWidth="1px"
-						borderRadius="lg"
-						overflow="hidden"
-						bg="#f96e29"
-						fontWeight="bold"
-						color="black"
-						textAlign="center"
-						mx="auto"
-						my="20px"
-					>
-						Jewelery
-					</Box>
+					<HeadingBox text={`Jewelery`} />
 					<Box
 						display="flex"
 						justifyContent="space-around"
