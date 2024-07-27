@@ -1,11 +1,10 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Box,
 	Flex,
 	Text,
 	IconButton,
-	Button,
 	Stack,
 	Collapse,
 	Icon,
@@ -13,9 +12,9 @@ import {
 	PopoverTrigger,
 	PopoverContent,
 	useColorModeValue,
-	useBreakpointValue,
 	useDisclosure,
-	Input, Image,
+	Input,
+	Image,
 } from '@chakra-ui/react';
 import {
 	HamburgerIcon,
@@ -31,9 +30,25 @@ import { useCart } from '@/provider/context/CartDataProvider';
 const Navbar = () => {
 	const { isOpen, onToggle } = useDisclosure();
 	const { cartData } = useCart();
+	const [isSticky, setIsSticky] = useState(false);
+
+	useEffect(() => {
+		const handleScroll = () => {
+			if (window.scrollY > 100) {
+				setIsSticky(true);
+			} else {
+				setIsSticky(false);
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll);
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
 
 	return (
-		<Box>
+		<Box className={isSticky ? 'sticky' : ''}>
 			<Flex
 				bg={useColorModeValue('white', 'gray.800')}
 				color={useColorModeValue('gray.600', 'white')}
@@ -68,12 +83,12 @@ const Navbar = () => {
 					justify={{ base: 'center', md: 'start' }}
 				>
 					<Image
-						src='/shopify-favicon.png'
+						src="/shopify-favicon.png"
 						alt="Shopify Image"
-						width='30px' // Adjust width and height as needed
-						height='30px'
+						width="30px"
+						height="30px"
 						layout="responsive"
-						priority="true" // Convert boolean to string
+						priority="true"
 					/>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
@@ -110,22 +125,24 @@ const Navbar = () => {
 							variant={'ghost'}
 							aria-label={'Shopping Cart'}
 						/>
-						{cartData.length !== 0 && <Box
-							position="absolute"
-							top="0.5"
-							left="5"
-							bg="red.500"
-							color="white"
-							borderRadius="full"
-							width="15px"
-							height="15px"
-							display="flex"
-							alignItems="center"
-							justifyContent="center"
-							fontSize="12px"
-						>
-							{cartData.length}
-						</Box>}
+						{cartData.length !== 0 && (
+							<Box
+								position="absolute"
+								top="0.5"
+								left="5"
+								bg="red.500"
+								color="white"
+								borderRadius="full"
+								width="15px"
+								height="15px"
+								display="flex"
+								alignItems="center"
+								justifyContent="center"
+								fontSize="12px"
+							>
+								{cartData.length}
+							</Box>
+						)}
 					</Link>
 				</Stack>
 			</Flex>

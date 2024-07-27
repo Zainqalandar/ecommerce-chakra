@@ -1,8 +1,25 @@
 import { Table, Thead, Tbody, Tr, Th, Td, IconButton, Image, Box, useBreakpointValue } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import DeleteConfirmationDialog from "@/components/ui/DeleteConfirmationDialog";
 
-const ProductTable = ({ products, onEdit, onDelete }) => {
+const ProductTable = ({ products, onEdit, onDelete, isDeletePending, DeletePendingHandler }) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+
+
     const fontSize = useBreakpointValue({ base: "sm", md: "md" });
+    const handleDeleteClick = (productId) => {
+        setSelectedProductId(productId);
+        setIsDialogOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        setIsDialogOpen(false);
+        DeletePendingHandler({ isDeletePending: true, btnId: selectedProductId });
+        onDelete(selectedProductId);
+    };
+
     return (
         <Box padding={{ base: "2", md: "4" }} overflowX="auto">
             <Table variant="simple" size="sm">
@@ -37,14 +54,20 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
                                 <IconButton
                                     icon={<DeleteIcon />}
                                     aria-label="Delete"
-                                    onClick={() => onDelete(product.id)}
+                                    onClick={() => handleDeleteClick(product.id)}
                                     size={{ base: "sm", md: "md" }}
+                                    isLoading={isDeletePending.isDeletePending && isDeletePending.btnId === product.id}
                                 />
                             </Td>
                         </Tr>
                     ))}
                 </Tbody>
             </Table>
+            <DeleteConfirmationDialog
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                onConfirm={handleConfirmDelete}
+            />
         </Box>
     )
 };

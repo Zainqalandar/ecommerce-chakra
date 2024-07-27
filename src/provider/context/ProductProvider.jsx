@@ -1,11 +1,13 @@
 'use client';
 import {createContext, useEffect, useState, useContext} from 'react';
 import {useNotification} from './NotificationProvider';
-
+import {usePathname, useSearchParams} from 'next/navigation';
 const ProductContext = createContext();
 
 const ProductProvider = ({children}) => {
     const notify = useNotification()
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [filterProducts, setFilterProducts] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,6 +15,8 @@ const ProductProvider = ({children}) => {
     const [searchQuerie, setSearchQuerie] = useState('');
     // Sort by Category that time not using ----------
     const [sortCategory, setSortCategory] = useState('');
+    const [isClearFilter, setIsClearFilter] = useState(false);
+    const [toggle, setToggle] = useState(false); // secondary state to trigger useEffect
 
     useEffect(() => {
         (async () => {
@@ -28,6 +32,18 @@ const ProductProvider = ({children}) => {
             }
         })();
     }, []);
+
+    useEffect(() => {
+        const handleRouteChange = () => {
+            clearFilterHandler();
+        };
+
+        handleRouteChange(); // Call it initially to handle the first render
+
+        // Listen to changes in pathname or search params
+        // This will re-run the effect when pathname or searchParams change
+        handleRouteChange();
+    }, [pathname, searchParams]);
 
 
     const sortByOrder = (order) => {
@@ -77,8 +93,12 @@ const ProductProvider = ({children}) => {
 
     const clearFilterHandler = () => {
         setFilterProducts(products);
-        console.log('Clear', filterProducts);
-    }
+        setSortOrder('');
+        setSortCategory('');
+        setSearchQuerie('');
+        setIsClearFilter(true);
+        setToggle(prev => !prev); // toggle the state
+    };
 
     return (
         <ProductContext.Provider
@@ -92,7 +112,9 @@ const ProductProvider = ({children}) => {
                 sortByCategory,
                 handleSearchQuerie,
                 deleteProductHandler,
-                clearFilterHandler
+                clearFilterHandler,
+                isClearFilter,
+                toggle
             }}
         >
             {children}

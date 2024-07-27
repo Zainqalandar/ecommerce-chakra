@@ -1,111 +1,106 @@
-'use client'
-import {useState} from "react";
-import AdminHeader from "@/components/admin/admin-header";
-import ProductTable from "@/components/admin/product-table";
-import ProductForm from "@/components/admin/product-form";
-import {useProductContext} from "@/provider/context/ProductProvider";
-import Loading from "@/components/ui/Loading";
-import {useNotification} from "@/provider/context/NotificationProvider";
+'use client';
+import { useState } from 'react';
+import AdminHeader from '@/components/admin/admin-header';
+import ProductTable from '@/components/admin/product-table';
+import ProductForm from '@/components/admin/product-form';
+import { useProductContext } from '@/provider/context/ProductProvider';
+import Loading from '@/components/ui/Loading';
+import { useNotification } from '@/provider/context/NotificationProvider';
+import { makeApiCall } from '@/app/api/apiService';
 
 const AdminRoot = () => {
-    const {products, loading, deleteProductHandler, filterProducts} = useProductContext()
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentProduct, setCurrentProduct] = useState(null);
-    const notify = useNotification()
+	const { products, loading, deleteProductHandler, filterProducts } =
+		useProductContext();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [currentProduct, setCurrentProduct] = useState(null);
+    const [isDeletePending, setisDeletePending] = useState({
+        isDeletePending: false,
+        btnId: null
+    })
 
-    console.log('Hello Admain')
+    const DeletePendingHandler = (configData) => {
+        setisDeletePending(configData);
+    };
+    
+	const notify = useNotification();
+	makeApiCall('products');
 
+	console.log('Hello Admain');
 
-    const handlePost = async (item) => {
+	const handlePost = async (item) => {
         try {
-            const res = await fetch('https://fakestoreapi.com/products', {
-                method: 'POST',
-                body: JSON.stringify({
-                    ...item
-                })
-            });
-
-            if(res.status === 200) {
-                notify(`Post successfully uploaded`, 'info', 4000);
-            }
-
+            await makeApiCall('products', 'POST', item);
+            notify(`Post successfully added`, 'info', 4000);
         } catch (error) {
             console.log('Api failed err', error);
             notify(`Error: ${error.message}`, 'error');
         }
-    }
+		
+	};
     const handleUpdate = async (item, postId) => {
         try {
-            const res = await fetch(`https://fakestoreapi.com/products/${postId}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    ...item
-                })
-            });
-
-            if(!res.ok){
-                throw new Error(`Error: ${res.message}`)
-            }
-
-            if(res.status === 200) {
-                notify(`Post successfully updated`, 'info', 4000);
-            }
+            await makeApiCall(`products/${postId}`, 'PUT', item);
+            notify(`Post successfully updated`, 'info', 4000);
         } catch (error) {
             console.log('Api failed err', error);
             notify(`Error: ${error.message}`, 'error');
         }
-    }
+    };
+
     const handleDelete = async (postId) => {
         try {
-            const res = await fetch(`https://fakestoreapi.com/products/${postId}`, {
-                method: 'DELETE',
-            });
-
-            if(!res.ok){
-                throw new Error(`Error: ${res.message}`)
-            }
-
-            if(res.status === 200) {
-                notify(`Post successfully Deleted`, 'info', 2000);
-                deleteProductHandler(postId)
-            }
+            await makeApiCall(`products/${postId}`, 'DELETE');
+            notify(`Post deleted successfully`, 'info', 4000);
+            deleteProductHandler(postId);
         } catch (error) {
             console.log('Api failed err', error);
             notify(`Error: ${error.message}`, 'error');
+            setisDeletePending({ isDeletePending: false, btnId: null });
         }
-    }
+	};
 
-    const openModal = (product = null) => {
-        setCurrentProduct(product);
-        setIsModalOpen(true);
-    };
+	const openModal = (product = null) => {
+		setCurrentProduct(product);
+		setIsModalOpen(true);
+	};
 
-    const closeModal = () => setIsModalOpen(false);
+	const closeModal = () => setIsModalOpen(false);
 
-    const saveProduct = (product) => {
-        if (currentProduct) {
-            // setProducts([...products, { ...product, id: products.length + 1 }]);
-            handleUpdate(product, product.id)
-        } else {
-            handlePost(product)
-        }
-        closeModal();
-    };
+	const saveProduct = (product) => {
+		if (currentProduct) {
+			// setProducts([...products, { ...product, id: products.length + 1 }]);
+			handleUpdate(product, product.id);
+		} else {
+			handlePost(product);
+		}
+		closeModal();
+	};
 
-    const deleteProduct = (id) => {
-        handleDelete(id)
-    }
-    return (
-        <>
-            <AdminHeader onAdd={() => openModal()}/>
-            {
-                !loading ? (<ProductTable products={filterProducts} onEdit={openModal} onDelete={deleteProduct}/>) : (
-                    <Loading/>
-                )
-            }
-            <ProductForm isOpen={isModalOpen} onClose={closeModal} product={currentProduct} onSave={saveProduct}/>
-        </>
-    )
-}
+	const deleteProduct = (id) => {
+		handleDelete(id);
+	};
+	return (
+		<>
+			<AdminHeader onAdd={() => openModal()} />
+			{!loading ? (
+				<ProductTable
+					products={filterProducts}
+					onEdit={openModal}
+					onDelete={deleteProduct}
+                    isDeletePending={isDeletePending}
+                    DeletePendingHandler={DeletePendingHandler}
+				/>
+			) : (
+				<Loading />
+			)}
+			<ProductForm
+				isOpen={isModalOpen}
+				onClose={closeModal}
+				product={currentProduct}
+				onSave={saveProduct}
+			/>
+		</>
+	);
+};
 
-export default AdminRoot
+export default AdminRoot;
