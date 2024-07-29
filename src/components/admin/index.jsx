@@ -25,7 +25,6 @@ const AdminRoot = () => {
 	const notify = useNotification();
 	makeApiCall('products');
 
-	console.log('Hello Admain');
 
 	const handlePost = async (item) => {
         try {

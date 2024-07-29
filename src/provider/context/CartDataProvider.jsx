@@ -40,7 +40,6 @@ const CartProvider = ({ children }) => {
 
   const handleRemoveProduct = (productId) => {
     setCartData((prev) => prev.filter((product) => product.id !== productId));
-    console.log('productId', productId);
   };
 
   useEffect(() => {

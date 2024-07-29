@@ -30,8 +30,6 @@ const ProductsFilter = () => {
 		order: '',
 	}
 	const [featureFilters, setFeatureFilters] = useState(initFeatureFilters);
-
-	console.log('featureFilters', featureFilters)
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		if (name === 'categorys') {
@@ -51,10 +49,9 @@ const ProductsFilter = () => {
 
 	useEffect(() => {
         if (isClearFilter) {
-            console.log('isClearFilter', isClearFilter);
             setFeatureFilters(initFeatureFilters);
         }
-    }, [toggle]); // watch the toggle state
+    }, [toggle, isClearFilter, initFeatureFilters, setFeatureFilters]); // watch the toggle state
 
 	const capitalizeWords = (sentence) => {
 		return sentence

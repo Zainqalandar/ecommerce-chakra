@@ -1,11 +1,12 @@
 'use client';
-import {createContext, useEffect, useState, useContext} from 'react';
-import {useNotification} from './NotificationProvider';
-import {usePathname, useSearchParams} from 'next/navigation';
+import { createContext, useEffect, useState, useContext } from 'react';
+import { useNotification } from './NotificationProvider';
+import { usePathname, useSearchParams } from 'next/navigation';
+
 const ProductContext = createContext();
 
-const ProductProvider = ({children}) => {
-    const notify = useNotification()
+const ProductProvider = ({ children }) => {
+    const notify = useNotification();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [filterProducts, setFilterProducts] = useState([]);
@@ -31,7 +32,7 @@ const ProductProvider = ({children}) => {
                 notify(`Error: ${error.message}`, 'error');
             }
         })();
-    }, []);
+    }, [notify]);
 
     useEffect(() => {
         const handleRouteChange = () => {
@@ -87,9 +88,9 @@ const ProductProvider = ({children}) => {
     };
 
     const deleteProductHandler = (id) => {
-        const filterOutDeleteProduct = [...filterProducts].filter((product) => product.id !== id)
+        const filterOutDeleteProduct = [...filterProducts].filter((product) => product.id !== id);
         setFilterProducts(filterOutDeleteProduct);
-    }
+    };
 
     const clearFilterHandler = () => {
         setFilterProducts(products);
@@ -98,6 +99,7 @@ const ProductProvider = ({children}) => {
         setSearchQuerie('');
         setIsClearFilter(true);
         setToggle(prev => !prev); // toggle the state
+        setIsClearFilter(false); // reset isClearFilter after use
     };
 
     return (
@@ -128,4 +130,4 @@ const useProductContext = () => {
     return useContext(ProductContext);
 };
 
-export {useProductContext};
+export { useProductContext };
