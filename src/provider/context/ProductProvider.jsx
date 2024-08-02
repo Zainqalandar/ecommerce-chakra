@@ -1,14 +1,14 @@
 'use client';
 import { createContext, useEffect, useState, useContext } from 'react';
 import { useNotification } from './NotificationProvider';
-import { usePathname, useSearchParams } from 'next/navigation';
+// import { usePathname, useSearchParams } from 'next/navigation';
 
 const ProductContext = createContext();
 
 const ProductProvider = ({ children }) => {
     const notify = useNotification();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
+  /*  const pathname = usePathname();
+    const searchParams = useSearchParams(); */
     const [filterProducts, setFilterProducts] = useState([]);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -33,7 +33,7 @@ const ProductProvider = ({ children }) => {
             }
         })();
     }, [notify]);
-
+/*
     useEffect(() => {
         const handleRouteChange = () => {
             clearFilterHandler();
@@ -45,6 +45,8 @@ const ProductProvider = ({ children }) => {
         // This will re-run the effect when pathname or searchParams change
         handleRouteChange();
     }, [pathname, searchParams]);
+
+    */
 
 
     const sortByOrder = (order) => {
